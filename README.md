@@ -91,7 +91,7 @@ If your Surplus JSX expression references any S signals, then Surplus creates an
 
 ```javascript
 var text = S.data("foo"),
-    node = <span>{text()}</span>; 
+    node = <span>{text()}</span>;
 
 // node starts out equal to <span>foo</span>
 
@@ -147,7 +147,7 @@ var title = <title></title>; // an HTMLTitleElement
 Children of SVG elements are also SVG elements, unless their parent is the `<foreignObject>` element, in which case they are DOM elements again.
 
 ```javascript
-var svg = 
+var svg =
     <svg>
         <text>an SVGTextElement</text>
         <foreignObject>
@@ -180,7 +180,7 @@ var props = { type: "text" },
     input3 = <input {...props} />;
 ```
 
-Since Surplus creates DOM elements, the property names generally refer to DOM element properties, although there are a few special cases: 
+Since Surplus creates DOM elements, the property names generally refer to DOM element properties, although there are a few special cases:
 
 1. If Surplus can tell that the given name belongs to an attribute not a property, it will set the attribute instead.  Currently, the heuristic used to distinguish attributes from properties is &ldquo;does it have a hyphen.&rdquo;  So `<div aria-hidden="true">` will set the `aria-hidden` attribute.
 2. Some properties have aliases.  See below.
@@ -253,15 +253,15 @@ JSX defines two kinds of children, static and dynamic.
 
 ```javascript
 // static
-var div = 
+var div =
     <div>
         <span>a static child</span>
         Static child text
     </div>;
 
-// { dynamic } 
+// { dynamic }
 var span = <span>a dynamic child</span>,
-    div = 
+    div =
         <div>
             {span}
         </div>;
@@ -335,7 +335,7 @@ If one of the build tools listed above doesn't work for you, you may need to wor
 import { compiler } from 'surplus/compiler';
 
 // simple string -> string translation, no sourcemap
-var out = compiler.compile(in); 
+var out = compiler.compile(in);
 
 // w/ appended sourcemap
 var out = compiler.compile(in, { sourcemap: 'append' });
