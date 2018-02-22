@@ -258,7 +258,9 @@ var div =
         <span>a static span child</span>
         Some static child div text
     </div>;
+```
 
+```jsx
 // { dynamic }
 var span = <span>child of a dynamic div</span>,
     div =
