@@ -1,8 +1,8 @@
 # Surplus
 
 ```jsx
-var name = S.data("world"),
-    view = <h1>Hello {name()}!</h1>;
+const name = S.data("world"),
+      view = <h1>Hello {name()}!</h1>;
 document.body.appendChild(view);
 ```
 Surplus is a compiler and runtime to allow [S.js](https://github.com/adamhaile/S) applications to create high-performance web views using JSX.  Thanks to JSX, the views are clear, declarative definitions of your UI.  Thanks to S, they update automatically and efficiently as your data changes.
@@ -20,7 +20,7 @@ The Surplus runtime must be imported as `Surplus` into any module using Surplus 
 
 ```javascript
 import * as Surplus from 'surplus'; // ES2015 modules
-var Surplus = require('surplus');   // CommonJS modules
+const Surplus = require('surplus');   // CommonJS modules
 ```
 
 ### Compiler
@@ -38,29 +38,30 @@ If you aren't using one of these tools, or if you want to write your own plugin,
 
 Here is a minimalist ToDo application, which you can run on [CodePen](https://codepen.io/adamhaile/pen/ppvdGa?editors=0010).
 ```jsx
-var Todo = t => ({               // our Todo constructor
-       title: S.data(t.title),   // properties are S data signals
-       done: S.data(t.done)
-    }),
-    todos = SArray([]),          // our todos, using SArray
-    newTitle = S.data(""),       // title for new todos
-    addTodo = () => {            // push new title onto list
-       todos.push(Todo({ title: newTitle(), done: false }));
-       newTitle("");             // clear new title
-    },
-    view =                       // declarative main view
-       <div>
+const Todo = t => ({            // our Todo constructor
+        title: S.data(t.title), // properties are S data signals
+        done: S.data(t.done)
+      }),
+      todos = SArray([]),       // our todos, using SArray
+      newTitle = S.data(""),    // title for new todos
+      addTodo = () => {         // push new title onto list
+        todos.push(Todo({ title: newTitle(), done: false }));
+        newTitle("");           // clear new title
+      };
+
+const view =                    // declarative main view
+      <div>
           <h2>Minimalist ToDos in Surplus</h2>
           <input type="text" fn={data(newTitle)}/>
           <a onClick={addTodo}> + </a>
-          {todos.map(todo =>     // insert todo views
-             <div>
+          {todos.map(todo =>    // insert todo views
+            <div>
                 <input type="checkbox" fn={data(todo.done)}/>
                 <input type="text" fn={data(todo.title)}/>
                 <a onClick={() => todos.remove(todo)}>&times;</a>
-             </div>
+            </div>
           )}
-       </div>;
+      </div>;
 
 document.body.appendChild(view); // add view to document
 ```
@@ -77,7 +78,7 @@ For a slighlty longer example, see the standard [TodoMVC in Surplus](https://git
 Surplus JSX expressions create real DOM elements, not virtual elements like React or other vdom libraries.
 
 ```javascript
-var node = <span>foo</span>;
+const node = <span>foo</span>;
 // since node is a real HTMLSpanElement, we can use its properties
 node.className = "bar";
 ```
@@ -90,8 +91,8 @@ Creating real DOM nodes removes the entire &ldquo;middle layer&rdquo; from Surpl
 If your Surplus JSX expression references any S signals, then Surplus creates an S computation to keep that part of the DOM up to date:
 
 ```jsx
-var text = S.data("foo"),
-    node = <span>{text()}</span>;
+const text = S.data("foo"),
+      node = <span>{text()}</span>;
 
 // node starts out equal to <span>foo</span>
 
@@ -120,9 +121,9 @@ Surplus apps generally rank at or near the top of most javascript benchmarks.  T
 ### Creating HTML Elements
 
 ```jsx
-var div       = <div></div>, // an HTMLDivElement
-    input     = <input/>;    // an HTMLInputElement
-    // ... etc
+const div   = <div></div>,  // an HTMLDivElement
+      input = <input/>;     // an HTMLInputElement
+      // ... etc
 ```
 
 JSX expressions with *lower-cased* tags create elements.  These are HTML elements, unless their tag name or context is known to be SVG (see next entry).
@@ -132,23 +133,23 @@ There are no unclosed tags in JSX: all elements must either have a closing tag `
 ### Creating SVG Elements
 
 ```jsx
-var svg       = <svg></svg>, // SVGSVGElement
-    svgCircle = <circle/>,   // SVGCircleElement
-    svgLine   = <line/>;     // SVGLineElement
-    // ... etc
+const svg       = <svg></svg>,  // SVGSVGElement
+      svgCircle = <circle/>,    // SVGCircleElement
+      svgLine   = <line/>;      // SVGLineElement
+      // ... etc
 ```
 
 If the tag name matches a known SVG element, Surplus will create an SVG element instead of an HTML one.  For the small set of tag names that belong to both -- `<a>`, `<font>`, `<title>`, `<script>` and `<style>` -- Surplus creates an HTML element.
 
 ```jsx
-var title = <title></title>; // an HTMLTitleElement
+const title = <title></title>; // an HTMLTitleElement
 ```
 
 Children of SVG elements are also SVG elements, unless their parent is the `<foreignObject>` element, in which case they are DOM elements again.
 
 ```jsx
-var svg =
-    <svg>
+const svg =
+      <svg>
         <text>an SVGTextElement</text>
         <foreignObject>
             <div>an HTMLDivElement</div>
@@ -159,8 +160,8 @@ var svg =
 To create the SVG version of an ambiguous tag name, put it under a known SVG tag and extract it.
 
 ```jsx
-var svg      = <svg><title>an SVGTitleElement</title></svg>,
-    svgTitle = svg.firstChild;
+const svg      = <svg><title>an SVGTitleElement</title></svg>,
+      svgTitle = svg.firstChild;
 ```
 
 ### Setting properties
@@ -169,15 +170,15 @@ JSX allows static, dynamic and spread properties:
 
 ```jsx
 // static
-var input1 = <input type="text" />;
+const input1 = <input type="text" />;
 
 // dynamic
-var text = "text",
-    input2 = <input type={text} />;
+const text   = "text",
+      input2 = <input type={text} />;
 
 // spread
-var props = { type: "text" },
-    input3 = <input {...props} />;
+const props  = { type: "text" },
+      input3 = <input {...props} />;
 ```
 
 Since Surplus creates DOM elements, the property names generally refer to DOM element properties, although there are a few special cases:
@@ -189,7 +190,7 @@ Since Surplus creates DOM elements, the property names generally refer to DOM el
 You can set a property with an unknown name, and it will be assigned to the node, but it will have no effect on the DOM:
 
 ```jsx
-var input = <input myProperty={true} />;
+const input = <input myProperty={true} />;
 input.myProperty === true;
 ```
 
@@ -207,20 +208,20 @@ For static and dynamic properties, aliases are normalized at compile time, for s
 If the same property is set multiple times on a node, the last one takes precedence:
 
 ```jsx
-var props = { type: "radio" },
-    input = <input {...props} type="text" />;
+const props = { type: "radio" },
+      input = <input {...props} type="text" />;
 input.type === "text";
 ```
 
 ### Special `ref` property
 
-A `ref` property specifies a variable to which the given node is assigned.  This makes it easy to get a reference to internal nodes.
+A `ref` property specifies a constiable to which the given node is assigned.  This makes it easy to get a reference to internal nodes.
 
 ```jsx
-var input,
-    div = <div>
-            <input ref={input} type="text" />
-          </div>;
+const input,
+      div = <div>
+                <input ref={input} type="text" />
+            </div>;
 input.type === "text";
 ```
 
@@ -232,8 +233,8 @@ A `fn` property specifies a function to be applied to a node.  It is useful for 
 
 ```jsx
 import { data } from 'surplus-fn-data'; // two-way data binding utility
-var value = S.data("foo"),
-    input = <input type="text" fn={data(value)} />;
+const value = S.data("foo"),
+      input = <input type="text" fn={data(value)} />;
 input.value === "foo";
 // user enters "bar" in input
 input.value === "bar";
@@ -253,7 +254,7 @@ JSX defines two kinds of children, static and dynamic.
 
 ```jsx
 // static
-var div =
+const div =
     <div>
         <span>a static span child</span>
         Some static child div text
@@ -262,11 +263,11 @@ var div =
 
 ```jsx
 // { dynamic }
-var span = <span>child of a dynamic div</span>,
-    div =
-        <div>
-            {span}
-        </div>;
+const span = <span>child of a dynamic div</span>;
+const div =
+    <div>
+        {span}
+    </div>;
 ```
 
 With a dynamic child, the given expression is evaluated, and its result is inserted into the child nodes according to the following rules:
@@ -337,14 +338,14 @@ If one of the build tools listed above doesn't work for you, you may need to wor
 import { compiler } from 'surplus/compiler';
 
 // simple string -> string translation, no sourcemap
-var out = compiler.compile(in);
+const out = compiler.compile(in);
 
 // w/ appended sourcemap
-var out = compiler.compile(in, { sourcemap: 'append' });
+const out = compiler.compile(in, { sourcemap: 'append' });
 
 // w/ extracted sourcemap
 // note that output is different, to return map and src
-var { out, map } = compiler.compile(in, { sourcemap: 'extract' });
+const { out, map } = compiler.compile(in, { sourcemap: 'extract' });
 ```
 
 ## FAQs
